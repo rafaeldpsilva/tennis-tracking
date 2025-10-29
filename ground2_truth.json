@@ -1,0 +1,18 @@
+{
+    "1":{
+        "top_left": [288.0, 151.0],
+        "top_right": [667.0, 151.0],
+        "bottom_left": [182.0, 428.0],
+        "bottom_right": [782.0, 428.0],
+        "service_top_left": [324.0, 196.0], 
+        "service_top_right": [632.0, 195.0], 
+        "service_bottom_left": [284.0, 339.0], 
+        "service_bottom_right": [677.0, 338.0],
+        "center_top": [478.0, 196.0], 
+        "center_bottom": [480.0, 338.0],
+        "inner_top_right": [619.0, 151.0],
+        "inner_bottom_right": [705.0, 427.0],
+        "inner_top_left": [336.0, 151.0], 
+        "inner_bottom_left": [258.0, 427.0]
+    }
+}
