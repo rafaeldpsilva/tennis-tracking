@@ -3,6 +3,17 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+# Model files (too large for git)
+*.pth
+*.pt
+*.pkl
+*.onnx
+*.weights
+*.caffemodel
+
+# Project-specific
+.claude
+CLAUDE.MD
 # C extensions
 *.so
 
