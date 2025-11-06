@@ -31,8 +31,7 @@ class PlayerDetector:
             "X101-FPN": "COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml",
         }
 
-        #config_file = model_zoo_configs.get(model_type, model_zoo_configs["R50-FPN"])
-        config_file = model_zoo_configs.get(model_type, model_zoo_configs["R101-FPN"])
+        config_file = model_zoo_configs.get(model_type, model_zoo_configs[model_type])
         cfg.merge_from_file(model_zoo.get_config_file(config_file))
         cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(config_file)
 
