@@ -31,7 +31,8 @@ class PlayerDetector:
             "X101-FPN": "COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml",
         }
 
-        config_file = model_zoo_configs.get(model_type, model_zoo_configs["R50-FPN"])
+        #config_file = model_zoo_configs.get(model_type, model_zoo_configs["R50-FPN"])
+        config_file = model_zoo_configs.get(model_type, model_zoo_configs["R101-FPN"])
         cfg.merge_from_file(model_zoo.get_config_file(config_file))
         cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(config_file)
 
@@ -64,23 +65,11 @@ class PlayerDetector:
         }
 
     def detect_and_filter_by_court(self, frame, court_mask=None, min_overlap=0.3):
-        """
-        Detect players and optionally filter by court region.
-
-        Args:
-            frame: BGR image
-            court_mask: Binary mask of court region (optional)
-            min_overlap: Minimum overlap with court to keep detection
-
-        Returns:
-            Same format as detect(), but filtered to players on court
-        """
         detections = self.detect(frame)
 
         if court_mask is None:
             return detections
 
-        # Filter players by court overlap
         filtered_boxes = []
         filtered_masks = []
         filtered_scores = []
@@ -88,7 +77,6 @@ class PlayerDetector:
         for box, mask, score in zip(detections['boxes'],
                                      detections['masks'],
                                      detections['scores']):
-            # Calculate overlap between player mask and court mask
             overlap = np.logical_and(mask, court_mask).sum() / mask.sum()
 
             if overlap >= min_overlap:
@@ -105,19 +93,6 @@ class PlayerDetector:
 
     def visualize(self, frame, detections, show_masks=True, show_boxes=True,
                   show_labels=True):
-        """
-        Visualize player detections on frame.
-
-        Args:
-            frame: BGR image
-            detections: Output from detect() or detect_and_filter_by_court()
-            show_masks: Draw segmentation masks
-            show_boxes: Draw bounding boxes
-            show_labels: Draw labels with confidence scores
-
-        Returns:
-            Annotated frame (BGR image)
-        """
         annotated = frame.copy()
 
         for i, (box, mask, score) in enumerate(zip(detections['boxes'],
@@ -144,15 +119,6 @@ class PlayerDetector:
         return annotated
 
     def get_player_centers(self, detections):
-        """
-        Get center points of each detected player.
-
-        Args:
-            detections: Output from detect()
-
-        Returns:
-            List of (x, y) center coordinates
-        """
         centers = []
         for box in detections['boxes']:
             x1, y1, x2, y2 = box
@@ -163,16 +129,6 @@ class PlayerDetector:
         return centers
 
     def get_player_foot_positions(self, detections):
-        """
-        Get foot positions (bottom center of bounding box).
-        Useful for determining player position on court.
-
-        Args:
-            detections: Output from detect()
-
-        Returns:
-            List of (x, y) foot coordinates
-        """
         foot_positions = []
         for box in detections['boxes']:
             x1, y1, x2, y2 = box
@@ -185,15 +141,6 @@ class PlayerDetector:
 
 def process_video(video_path, output_path=None, confidence_threshold=0.7,
                   show_visualization=True):
-    """
-    Process a video and detect players in each frame.
-
-    Args:
-        video_path: Path to input video
-        output_path: Path to save output video (optional)
-        confidence_threshold: Detection confidence threshold
-        show_visualization: Display real-time visualization
-    """
     # Initialize detector
     detector = PlayerDetector(confidence_threshold=confidence_threshold)
 
