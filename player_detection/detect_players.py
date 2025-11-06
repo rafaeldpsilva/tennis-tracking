@@ -138,10 +138,10 @@ class PlayerDetector:
         return foot_positions
 
 
-def process_video(video_path, output_path=None, confidence_threshold=0.7,
+def process_video(video_path, output_path=None, confidence_threshold=0.7, model_type="R50-FPN",
                   show_visualization=True):
     # Initialize detector
-    detector = PlayerDetector(confidence_threshold=confidence_threshold)
+    detector = PlayerDetector(confidence_threshold=confidence_threshold, model_type=model_type)
 
     # Open video
     cap = cv2.VideoCapture(video_path)
@@ -253,7 +253,7 @@ if __name__ == "__main__":
 
     elif args.video:
         # Process video
-        process_video(args.video, args.output, args.confidence)
+        process_video(args.video, args.output, args.confidence, args.model)
 
     else:
         print("Please provide either --video or --image argument")
